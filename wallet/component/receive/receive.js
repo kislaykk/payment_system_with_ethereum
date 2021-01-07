@@ -3,7 +3,9 @@ import {View,Text,Button} from 'react-native';
 const Receive=()=>{
     return(
         <View>
-            <Button title='receive payment'/>
+            <Text>
+                receive
+            </Text>
         </View>
         
     )

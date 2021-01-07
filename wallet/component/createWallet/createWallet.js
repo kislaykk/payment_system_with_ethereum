@@ -1,11 +1,14 @@
 import React from 'react';
-import {View,Text, Button} from 'react-native';
+import {View,Text} from 'react-native';
 
-const CreateWallet=()=>{
+const CreateWalletForm=()=>{
     return (
         <View>
-            <Button title={'create a wallet'}/>
+            <Text>
+                here will go the form for wallet;
+            </Text>
         </View>
     )
 }
-export default CreateWallet;
+
+export default CreateWalletForm;
