@@ -7,7 +7,8 @@ import CreateWallet from './component/createWallet/createWallet';
 import ImportAccount from './component/importAccount/importAccount';
 import Payment from './component/pay/pay';
 import Receive from './component/receive/receive';
-
+let {dbCreation} = require('./databaseOperation/dbCreation.js');
+dbCreation();
 
 const App=(props)=> {
   return (

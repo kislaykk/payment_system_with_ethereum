@@ -1,9 +1,25 @@
 import React, { useState } from 'react';
 import {View,Text,Button,TextInput} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
-
+const {gettingAllAccounts} =require('../../databaseOperation/gettingAllAccounts')
+const getAccountList = async () =>{
+    let accountArray = await gettingAllAccounts();
+    // console.log(accountArray)
+    // let accounts = accountArray.map((acc,i)=> <Picker.Item key={acc.privateKey} label={acc.address} value={acc.address}/>);
+    // let accounts = accountArray.map((acc)=>acc.address)
+    let accounts=[]
+    accountArray.forEach(acc=>{
+        accounts.push(acc.address)
+    })
+    // console.log(accounts)
+    return accounts;
+}
 const Payment=()=>{
-    const [payFrom,setPayFrom]=useState('');
+    const [payFrom,setPayFrom]=useState('unselected');
+    let accountList = getAccountList();
+    
+    console.log(accountList)
+    
     return(
         <View style={{
             flex:1,
@@ -17,9 +33,7 @@ const Payment=()=>{
             style={{height:50,width:250}}
             onValueChange={(itemValue,itemIndex)=>setPayFrom(itemValue)}
             >
-            <Picker.Item label='account1' value='account1'/>
-            <Picker.Item label='account2' value='account2'/>
-            <Picker.Item label='account3' value='account3'/>                
+              {/* {accountListToRender}           */}
             </Picker>
             <Text>
                 Enter account you want to pay
