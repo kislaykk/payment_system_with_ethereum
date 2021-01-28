@@ -3,22 +3,22 @@ import {View,Text,Button,TextInput} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 const {gettingAllAccounts} =require('../../databaseOperation/gettingAllAccounts')
 const getAccountList = async () =>{
-    let accountArray = await gettingAllAccounts();
-    // console.log(accountArray)
-    // let accounts = accountArray.map((acc,i)=> <Picker.Item key={acc.privateKey} label={acc.address} value={acc.address}/>);
-    // let accounts = accountArray.map((acc)=>acc.address)
-    let accounts=[]
-    accountArray.forEach(acc=>{
-        accounts.push(acc.address)
-    })
-    // console.log(accounts)
-    return accounts;
+    const accountArray = await gettingAllAccounts();
+    return accountArray;
 }
-const Payment=()=>{
+
+const Payment= ()=>{
     const [payFrom,setPayFrom]=useState('unselected');
-    let accountList = getAccountList();
+    const [PickerItem,setPickerItem]= useState([<Picker.Item key="1" value="unselected" label="unselected"/>])
+    const accountList = getAccountList();
+    accountList.then(values=>{
+        let accounts = [<Picker.Item key="1" value="unselected" label="unselected"/>] ;
+        values.forEach(val=>{
+            accounts.push(<Picker.Item key={val.privateKey} value={val.address} label={val.address}/>)
+        })
+        setPickerItem(accounts);
+    });
     
-    console.log(accountList)
     
     return(
         <View style={{
@@ -33,7 +33,7 @@ const Payment=()=>{
             style={{height:50,width:250}}
             onValueChange={(itemValue,itemIndex)=>setPayFrom(itemValue)}
             >
-              {/* {accountListToRender}           */}
+              {PickerItem}
             </Picker>
             <Text>
                 Enter account you want to pay
@@ -47,7 +47,7 @@ const Payment=()=>{
             <TextInput
                     style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
             />
-            <Button title='pay'/>
+            <Button title='pay' onPress={()=>{console.log(payFrom)}}/>
         </View>
         
     )

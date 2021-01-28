@@ -1,6 +1,6 @@
 import * as SQLite from 'expo-sqlite';
 
-exports.gettingAllAccounts = async ()=>{
+exports.gettingAllAccounts =  ()=>{
     let promise = new Promise((resolve,reject)=>{
         const db = SQLite.openDatabase('walletDb');
         db.transaction(tx=>{
