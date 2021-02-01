@@ -1,0 +1,4 @@
+wallet/node_modules
+wallet/.expo/web/cache/development/*
+paymentServer/node_modules
+node_modules

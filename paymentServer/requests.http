@@ -1,0 +1,48 @@
+@hostname = http://localhost
+@port = 3000
+@host = https://polar-depths-87667.herokuapp.com
+
+###The requests ####
+
+### app endpoint check ###w
+GET {{host}} HTTP/1.1
+
+### wallet functionality ###
+GET {{host}}/wallet HTTP/1.1
+
+### wallet functionality - create wallet ###
+GET  {{host}}/wallet/create HTTP/1.1
+
+### wallet functionality - create account ###
+GET {{host}}/wallet/account HTTP/1.1
+### wallet functionality - get balance ###
+GET {{host}}/wallet/balance HTTP/1.1
+Content-Type: application/json
+
+{
+    "address": "0x6C83E041E8289635dfB6B2aF3F500348E86034Cd"
+}
+### import account functionality ###
+GET {{host}}/import HTTP/1.1
+
+### import account functionality -import  ###
+POST {{host}}/import/account HTTP/1.1
+Content-Type: application/json
+
+{
+    "privateKey": "0x752c5be80e00c56274cf580cecc1b7cd033601ce2f7718da63b2ba136dd3a428"
+}
+
+### conduct transaction ###
+GET {{host}}/transaction HTTP/1.1
+
+### conduct transaction ###
+POST {{host}}/transaction/send HTTP/1.1
+Content-Type: application/json
+
+{
+    "privateKey":"0x4665bc3ab3deb74575e7720691c0d02406028836c8e8dda69ef44a9219db33e4",
+    "to":"0xDDd6449aDF19F62F82216252cFf7Cbf8E53E75F4",
+    "from":"0x3f8856C35a06965376D03Ef68CBD19b00B13b200",
+    "value":"12000"
+}
