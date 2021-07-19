@@ -1,4 +1,4 @@
 {
-    "web3ProviderURL":"https://goerli.infura.io/v3/5554536b91eb4e30963c552bfc9a9694",
-    "paymentServer":"https://polar-depths-87667.herokuapp.com"
+    "web3ProviderURL":"https://rinkeby.infura.io/v3/5554536b91eb4e30963c552bfc9a9694",
+    "paymentServer":"https://rocky-temple-86195.herokuapp.com"
 }

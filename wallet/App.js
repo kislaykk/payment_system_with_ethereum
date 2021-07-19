@@ -7,6 +7,7 @@ import CreateWallet from './component/createWallet/createWallet';
 import ImportAccount from './component/importAccount/importAccount';
 import Payment from './component/pay/pay';
 import Receive from './component/receive/receive';
+import RideBus from './component/rideBus/rideBus';
 let {dbCreation} = require('./databaseOperation/dbCreation.js');
 dbCreation();
 const App=(props)=> {
@@ -38,6 +39,13 @@ const App=(props)=> {
       <Button
       title="receive from someone"
       onPress={()=>(props.navigation.navigate('receive'))}
+      />
+      </View>
+
+      <View style={styles.buttonContainer}>
+      <Button
+      title="ride the bus"
+      onPress={()=>(props.navigation.navigate('rideBus'))}
       />
       </View>
       
@@ -77,6 +85,9 @@ const appNavigator = createStackNavigator({
   },
   receive:{
     screen:Receive
+  },
+  rideBus:{
+    screen:RideBus
   }
 })
 

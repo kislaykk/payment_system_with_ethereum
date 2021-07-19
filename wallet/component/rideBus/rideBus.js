@@ -4,7 +4,8 @@ import {Picker} from '@react-native-picker/picker';
 const {gettingAllAccounts} =require('../../databaseOperation/gettingAllAccounts')
 import { BarCodeScanner } from 'expo-barcode-scanner';
 const axios=require('axios');
-const {paymentServer} = require('../../assets/walletInfo.json')
+const {paymentServer} = require('../../assets/walletInfo.json');
+import fetchBusInfo from '../firebaseOp';
 const getAccountList = async () =>{
     const accountArray = await gettingAllAccounts();
     return accountArray;
@@ -71,18 +72,28 @@ const makePayment = async (payfrom,payto,amount) =>{
     
 
 }
-const Payment= ()=>{
+const RideBus= ()=>{
     const [payFrom,setPayFrom]=useState('unselected');// payFrom contains both the address and privateKey.
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
+    const [bus,setBus]=useState('');
     const [payTo,setPayTo]=useState('');
     const [amount,setAmount]=useState('');
+    const [busInfo,setBusInfo]=useState({});
     const [PickerItem,setPickerItem]= useState([<Picker.Item key="1" value="unselected" label="unselected"/>])
-    const accountList = getAccountList();
+    const [DestinationItem,setDestinationItem] = useState([]);
+    const accountList = getAccountList(); 
 
     const Qrbutton=()=>{
         if (scanned)
-        return <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />
+        return <Button title={'Tap to Scan Again'} onPress={() => {
+            setScanned(false);
+            setAmount('');
+            setBus('')
+            setBusInfo({});
+            setPayTo('');
+            setDestinationItem([<Picker.Item key="1" value="unselected" label="unselected"/>]);
+        }} />
         else return null;
     }
     accountList.then(values=>{
@@ -93,15 +104,25 @@ const Payment= ()=>{
         setPickerItem(accounts);
     });
     
+
     useEffect(() => {
         (async () => {
           const { status } = await BarCodeScanner.requestPermissionsAsync();
           setHasPermission(status === 'granted');
         })();
       }, []);
-    const handleBarCodeScanned = ({ type, data }) => {
+    const handleBarCodeScanned = async ({ type, data }) => {
+        setBus(data);
         setScanned(true);
-        setPayTo(data);
+        const busD = await fetchBusInfo(data);
+        setBusInfo(busD);
+        setPayTo(busD.address);
+        let destinations = [] ;
+        busD.stoppages.forEach((val,index)=>{
+            destinations.push(<Picker.Item key={index} value={`${val.fare}`} label={`${val.stoppage}-${val.fare}`}/>)
+        })
+        setDestinationItem(destinations);
+        setBusInfo(busD);
         alert(`Bar code with type ${type} and data ${data} has been scanned!`);
       };
     
@@ -127,22 +148,25 @@ const Payment= ()=>{
                     getBalanceFromSever(add.trim());
                 }
             }}/>
+
+            {busInfo.address?
+            <>
+            <Text>Bus Found</Text>
+            
             <Text>
-                Enter account you want to pay
+                select stoppage
             </Text>
-            <TextInput
-                    style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                    onChangeText={payto=>setPayTo(payto)}
-                    value={payTo}
-            />          
-            <Text>
-                Enter the amount in wei
-            </Text>
-            <TextInput
-                    style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                    onChangeText={amt=>setAmount(amt)}
-                    value={amount}
-            />
+            <Picker
+            selectedValue={busInfo.stoppages[0].stoppage}
+            style={{height:50,width:250}}
+            onValueChange={(itemValue,itemIndex)=>setAmount(itemValue)}
+            >
+              {DestinationItem}
+            </Picker>
+            </>
+            :null}
+
+
             <Button title='pay' onPress={()=>makePayment(payFrom,payTo,amount)}/>
             <BarCodeScanner
             onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
@@ -153,4 +177,4 @@ const Payment= ()=>{
     )
 }
 
-export default Payment;
+export default RideBus;
