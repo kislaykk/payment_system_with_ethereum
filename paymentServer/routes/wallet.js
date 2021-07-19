@@ -37,7 +37,7 @@ router.get('/account',(req,res)=>{
     })
 })
 
-router.get('/balance',(req,res)=>{
+router.post('/balance',(req,res)=>{
     if(!req.body) res.status(500).json({"message":"this request has no body"});
     else if(!req.body.address) res.status(500).json({"message":"the body has no address"});
     else
