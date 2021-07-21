@@ -77,6 +77,7 @@ const RideBus= ()=>{
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
     const [bus,setBus]=useState('');
+    const [stoppage,setStoppage]=useState('');
     const [payTo,setPayTo]=useState('');
     const [amount,setAmount]=useState('');
     const [busInfo,setBusInfo]=useState({});
@@ -92,6 +93,7 @@ const RideBus= ()=>{
             setBus('')
             setBusInfo({});
             setPayTo('');
+            setStoppage('');
             setDestinationItem([<Picker.Item key="1" value="unselected" label="unselected"/>]);
         }} />
         else return null;
@@ -119,9 +121,10 @@ const RideBus= ()=>{
         setPayTo(busD.address);
         let destinations = [] ;
         busD.stoppages.forEach((val,index)=>{
-            destinations.push(<Picker.Item key={index} value={`${val.fare}`} label={`${val.stoppage}-${val.fare}`}/>)
+            destinations.push(<Picker.Item key={index} value={`${val.stoppage}-${val.fare}`} label={`${val.stoppage}-${val.fare}`}/>)
         })
         setDestinationItem(destinations);
+        setStoppage(`${busD.stoppages[0].stoppage}-${busD.stoppages[0].fare}`)
         setBusInfo(busD);
         alert(`Bar code with type ${type} and data ${data} has been scanned!`);
       };
@@ -157,9 +160,13 @@ const RideBus= ()=>{
                 select stoppage
             </Text>
             <Picker
-            selectedValue={busInfo.stoppages[0].stoppage}
+            selectedValue={stoppage}
             style={{height:50,width:250}}
-            onValueChange={(itemValue,itemIndex)=>setAmount(itemValue)}
+            onValueChange={(itemValue,itemIndex)=>{
+                setAmount(itemValue.split('-')[1])
+                setStoppage(itemValue);
+                
+            }}
             >
               {DestinationItem}
             </Picker>
